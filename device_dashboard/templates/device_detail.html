@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Device Details{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>{{ device.name }}</h2>
+</div>
+
+<div class="card device-summary">
+  <div><strong>Hostname:</strong> {{ device.hostname or '-' }}</div>
+  <div><strong>IP:</strong> {{ device.ip_address or '-' }}</div>
+  <div><strong>OS:</strong> {{ device.os_name or '-' }}</div>
+  <div><strong>Status:</strong> <span class="badge {{ device.status }}">{{ device.status }}</span></div>
+  <div><strong>Last seen:</strong> {{ device.last_seen or '-' }}</div>
+  <div><strong>Notes:</strong> {{ device.notes or 'No notes' }}</div>
+</div>
+
+<div class="action-row">
+  <form method="post">
+    <input type="hidden" name="action" value="ping">
+    <button type="submit">Ping</button>
+  </form>
+  <form method="post">
+    <input type="hidden" name="action" value="mark_online">
+    <button type="submit">Mark online</button>
+  </form>
+  <form method="post">
+    <input type="hidden" name="action" value="mark_offline">
+    <button type="submit">Mark offline</button>
+  </form>
+</div>
+
+<div class="card">
+  <h3>Event log</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Message</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr>
+        <td>{{ event.event_type }}</td>
+        <td>{{ event.message }}</td>
+        <td>{{ event.created_at }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="3">No events recorded.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Devices{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>Devices</h2>
+  <a class="button" href="#add-device">Add device</a>
+</div>
+
+<div class="card" id="add-device">
+  <h3>Add device</h3>
+  <form method="post" class="form-grid">
+    <div>
+      <label>Name</label>
+      <input type="text" name="name" required>
+    </div>
+    <div>
+      <label>Hostname</label>
+      <input type="text" name="hostname">
+    </div>
+    <div>
+      <label>IP Address</label>
+      <input type="text" name="ip_address">
+    </div>
+    <div>
+      <label>Operating System</label>
+      <input type="text" name="os_name">
+    </div>
+    <div class="full-width">
+      <label>Notes</label>
+      <textarea name="notes" rows="3"></textarea>
+    </div>
+    <div class="full-width">
+      <button type="submit">Save device</button>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Host</th>
+        <th>IP</th>
+        <th>OS</th>
+        <th>Status</th>
+        <th>Last seen</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for device in devices %}
+      <tr>
+        <td><a href="{{ url_for('device_detail', device_id=device.id) }}">{{ device.name }}</a></td>
+        <td>{{ device.hostname or '-' }}</td>
+        <td>{{ device.ip_address or '-' }}</td>
+        <td>{{ device.os_name or '-' }}</td>
+        <td><span class="badge {{ device.status }}">{{ device.status }}</span></td>
+        <td>{{ device.last_seen or '-' }}</td>
+        <td><a href="{{ url_for('device_detail', device_id=device.id) }}">Open</a></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">No devices registered.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

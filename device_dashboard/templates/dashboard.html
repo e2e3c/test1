@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h2>Overview</h2>
+</div>
+
+<div class="stats-grid">
+  <div class="card stat-card">
+    <span class="label">Total devices</span>
+    <strong>{{ total_devices }}</strong>
+  </div>
+  <div class="card stat-card">
+    <span class="label">Online</span>
+    <strong class="green">{{ online_devices }}</strong>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h3>Recent devices</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+          <th>IP</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for device in devices %}
+        <tr>
+          <td><a href="{{ url_for('device_detail', device_id=device.id) }}">{{ device.name }}</a></td>
+          <td><span class="badge {{ device.status }}">{{ device.status }}</span></td>
+          <td>{{ device.ip_address or 'unknown' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">No devices yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Activity feed</h3>
+    <ul class="feed">
+      {% for item in recent_events %}
+      <li>
+        <span class="event-type">{{ item.event_type }}</span>
+        <div>{{ item.device_name }} — {{ item.message }}</div>
+      </li>
+      {% else %}
+      <li>No events yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
